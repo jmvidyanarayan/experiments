@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .b{
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            margin-top: 100px;
+            
+            
+        }
+        .form{
+            padding: 50px 50px;
+            width: 300px;
+            border-style: solid;
+            border-radius: 50px;
+            border-color: black;
+            background: linear-gradient(25deg,red,rgb(55, 0, 255));
+        }
+        .form label{
+            font-size: 20px;
+        }
+        .inp input{
+            margin-bottom: 10px;
+            border-color: antiquewhite;
+            border: .1px solid;
+            padding: 5px;
+            width: 100%;
+            border-radius: 0px;
+        }
+        .form input:focus{
+            border-color: rgb(245, 229, 5);
+        }
+        .form container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 5%;
+            padding-right: 5%;
+            padding-top: 2%;
+        }
+        button{
+            font-size: medium;
+            border-radius: 5px;
+            padding: 10%;
+            border: 5px solid white;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .form button{
+            transition: all ease 0.5s;
+        }
+        .form button:hover{
+            font-size: large;
+            color: rgb(250, 159, 131);
+            background: black;
+            border: 5px solid black;
+        }
+    </style>
+<body>
+    <div class="b">
+        <div class="form">
+        <div class="inp">
+            <label>name </label>
+            <input type="text" placeholder="enter your name">
+            <label>e-mail </label>
+            <input type="text" placeholder="enter your email">
+            <label>mobile </label>
+            <input type="text" placeholder="enter your mobile">
+            <label>password </label>
+            <input type="password" placeholder="enter password">
+        </div>
+            <label>Gender</label>
+            <div class="radio-group">
+            <input type="radio" name="gender" value="Male"> Male
+            <input type="radio" name="gender" value="Female"> Female
+            </div>
+            <label>Course</label>
+        <select id="course">
+            <option value="">-- Select Course --</option>
+            <option>Java</option>
+            <option>Python</option>
+            <option>Web Development</option>
+            <option>Data Science</option>
+        </select>
+            <container>
+            <container>     
+                <button type="submit">sumbit</button>
+            </container>
+            <container>
+                <button type="reset">reset</button>
+            </container>
+            </container>
+        </div>
+    </div>
+
+<script>
+document.querySelector("button[type='submit']").addEventListener("click", function (e) {
+    e.preventDefault(); // stop form submission
+
+    const inputs = document.querySelectorAll(".inp input");
+    const name = inputs[0].value.trim();
+    const email = inputs[1].value.trim();
+    const mobile = inputs[2].value.trim();
+    const password = inputs[3].value.trim();
+
+    const gender = document.querySelector("input[name='gender']:checked");
+    const course = document.getElementById("course").value;
+
+    // Name
+    if (name === "") {
+        alert("Name is required");
+        return;
+    }
+
+    // Email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert("Enter a valid email");
+        return;
+    }
+
+    // Mobile
+    if (!/^\d{10}$/.test(mobile)) {
+        alert("Enter a valid 10-digit mobile number");
+        return;
+    }
+
+    // Password
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+    }
+
+    // Gender
+    if (!gender) {
+        alert("Please select gender");
+        return;
+    }
+
+    // Course
+    if (course === "") {
+        alert("Please select a course");
+        return;
+    }
+
+    alert("Form submitted successfully!");
+});
+</script>
+<script>
+document.querySelector("button[type='reset']").addEventListener("click", function () {
+
+    // Clear text & password inputs
+    document.querySelectorAll(".inp input").forEach(input => {
+        input.value = "";
+    });
+
+    // Uncheck radio buttons
+    document.querySelectorAll("input[name='gender']").forEach(radio => {
+        radio.checked = false;
+    });
+
+    // Reset course dropdown
+    document.getElementById("course").value = "";
+
+});
+</script>
+
+</body>
+</head>
+</html>
