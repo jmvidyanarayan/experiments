@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Creative CAPTCHA Form</title>
+
+<style>
+body { font-family: Arial; }
+
+.b {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+}
+
+.form {
+    padding: 40px;
+    width: 320px;
+    border: 2px solid black;
+    border-radius: 30px;
+    background: linear-gradient(25deg, red, rgb(55,0,255));
+    color: white;
+}
+
+input, select {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 2px solid white;
+    background: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: black;
+    color: orange;
+    border-color: black;
+}
+
+.captchaBox {
+    margin-top: 15px;
+    background: rgba(255,255,255,0.2);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.slider {
+    width: 100%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="b">
+<div class="form">
+
+<label>Name</label>
+<input type="text" id="name">
+
+<label>Email</label>
+<input type="text" id="email">
+
+<label>Mobile</label>
+<input type="text" id="mobile">
+
+<label>Password</label>
+<input type="password" id="password">
+
+<label>Gender</label><br>
+<input type="radio" name="gender" value="Male"> Male
+<input type="radio" name="gender" value="Female"> Female
+<br><br>
+
+<label>Course</label>
+<select id="course">
+<option value="">-- Select Course --</option>
+<option>Java</option>
+<option>Python</option>
+<option>Web Development</option>
+<option>Data Science</option>
+</select>
+
+<!-- CREATIVE CAPTCHA -->
+<div class="captchaBox">
+    <div id="captchaQuestion"></div>
+    <input type="range" min="0" max="50" value="0" class="slider" id="slider">
+    <div>Your answer: <span id="sliderValue">0</span></div>
+</div>
+
+<br>
+<button id="submitBtn">Submit</button>
+<button id="resetBtn">Reset</button>
+
+</div>
+</div>
+
+<script>
+
+// ===== GENERATE RANDOM MATH PUZZLE =====
+
+let correctAnswer = 0;
+
+function newCaptcha() {
+
+    const a = Math.floor(Math.random() * 10) + 1;
+    const b = Math.floor(Math.random() * 10) + 1;
+    const c = Math.floor(Math.random() * 5) + 1;
+
+    // Puzzle: a × b + c
+    correctAnswer = a * b + c;
+
+    document.getElementById("captchaQuestion")
+        .textContent = `Solve: ${a} × ${b} + ${c}`;
+
+    document.getElementById("slider").value = 0;
+    document.getElementById("sliderValue").textContent = 0;
+}
+
+newCaptcha();
+
+
+// ===== SLIDER DISPLAY =====
+
+const slider = document.getElementById("slider");
+slider.oninput = function () {
+    document.getElementById("sliderValue").textContent = this.value;
+};
+
+
+// ===== SUBMIT VALIDATION =====
+
+document.getElementById("submitBtn").onclick = function () {
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const gender = document.querySelector("input[name='gender']:checked");
+    const course = document.getElementById("course").value;
+
+    // Basic validation
+    if (!name) return alert("Name required");
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email))
+        return alert("Invalid email");
+
+    if (!/^\d{10}$/.test(mobile))
+        return alert("Enter 10-digit mobile");
+
+    if (password.length < 6)
+        return alert("Password ≥ 6 characters");
+
+    if (!gender)
+        return alert("Select gender");
+
+    if (!course)
+        return alert("Select course");
+
+    // CAPTCHA CHECK
+    if (parseInt(slider.value) !== correctAnswer) {
+        alert("CAPTCHA incorrect!");
+        newCaptcha();
+        return;
+    }
+
+    alert("Registration Successful ✅");
+
+};
+
+
+// ===== RESET =====
+
+document.getElementById("resetBtn").onclick = function () {
+
+    document.querySelectorAll("input").forEach(i => i.value = "");
+    document.querySelectorAll("input[name='gender']")
+        .forEach(r => r.checked = false);
+
+    document.getElementById("course").value = "";
+    newCaptcha();
+};
+
+</script>
+
+</body>
+</html>
